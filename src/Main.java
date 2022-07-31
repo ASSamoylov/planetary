@@ -8,13 +8,5 @@ public class Main {
         GUI gui = new GUI(title);
         gui.setVisible(true);
 
-        Person arina = new Person(16, "Arisha");
-        List<Person> personList = new ArrayList<>();
-
-        personList.add(arina);
-        personList.add(new Person(20,"Kostyan"));
-
-        for (int i = 0; i < 2; i++)
-        System.out.println(personList.get(i));
     }
 }
