@@ -17,11 +17,16 @@ public class GUI extends JFrame {
             "Console (Browser)"
     }; // Добавлять новые вкладки с конца!!
 
+    final String [] pageNames = {"Java",
+    "C++",
+    "Python",
+    "C#",
+    "Delphi"};
     final JButton buttonStop = new JButton("Стоп");
     final JButton buttonPause = new JButton("||");
     final JButton buttonNext = new JButton(">");
     final JButton buttonPrev = new JButton("<");
-    JList<String> listSlide = new JList<>();
+    JComboBox<String> pageBox = new JComboBox<>(pageNames);
 
     JLabel name = new JLabel();
     JLabel timeGo = new JLabel();
@@ -84,7 +89,8 @@ public class GUI extends JFrame {
                 case (1):
                     BufferedImage bufferedImage;
                     try {
-                        bufferedImage = ImageIO.read(new File("image.gif"));
+                        File fileImage = new File("image.gif"); //картинку сюда
+                        bufferedImage = ImageIO.read(fileImage);
                         Image image = bufferedImage.getScaledInstance(450, 450, Image.SCALE_AREA_AVERAGING);
                         ImageIcon icon = new ImageIcon(image);
                         JLabel label = new JLabel();
@@ -155,8 +161,33 @@ public class GUI extends JFrame {
                     break;
 
                 // Вкладка 5: Работа с презентацией
+                /*
+                добавить папку
+                стереть пустую папку
+                добавить презентация
+                стереть из списка презентаций (не с диска)
+                выбор презентация
+                быстрый доступ (5-10 презентаций) к часто используемым.
+                 */
+                //TODO: сделать интерфейс + функционал
                 case (4):
-                    panel.add(new JButton("На вкладке 5"));
+                    JButton buttonOpenFile = new JButton("Выбрать файл");
+                    JLabel chosenFile =  new JLabel("пока ничего");
+                    JFileChooser fileChooser = new JFileChooser();
+
+                    buttonOpenFile.addActionListener(e -> {
+                        int ret = fileChooser.showDialog(null, "Открыть файл");
+                        if (ret == JFileChooser.APPROVE_OPTION) {
+                            File file = fileChooser.getSelectedFile();
+                            chosenFile.setText(file.getName());
+                            /*
+                             * Какие-то действия.
+                             */
+                        }
+                    });
+
+                    panel.add(chosenFile);
+                    panel.add(buttonOpenFile);
 
                     tabbedPane.addTab(nameTabs[i], panel);
                     break;
@@ -197,20 +228,42 @@ public class GUI extends JFrame {
 
 
         getContentPane().add(tabbedPane);
+        getContentPane().add(createBottomPanel(), BorderLayout.SOUTH);
 
 
+        setVisible(true);
+    }
+
+    JPanel createBottomPanel () {
         JPanel bottomPanel = new JPanel(new GridLayout());
+        buttonNext.addActionListener(e -> {
+            System.out.println("сработала кнопка вперед");
+        });
+        buttonPause.addActionListener(e -> {
+            System.out.println("сработала кнопка пауза");
+        });
+        buttonPrev.addActionListener(e -> {
+            System.out.println("сработала кнопка назад");
+        });
+        buttonStop.addActionListener(e -> {
+            System.out.println("сработала кнопка стоп");
+        });
+        pageBox.addActionListener(a -> {
+            String x = String.valueOf(pageBox.getSelectedItem());
+            System.out.println("способ рабочий " + x);
+
+        });
+
         bottomPanel.add(buttonPrev);
         bottomPanel.add(buttonNext);
         bottomPanel.add(buttonStop);
         bottomPanel.add(buttonPause);
-        bottomPanel.add(listSlide);
+        pageBox.setEditable(true);
+        bottomPanel.add(pageBox);
+
         bottomPanel.setBackground(Color.BLUE);
 
-        getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-
-
-        setVisible(true);
+        return bottomPanel;
     }
 
     JPanel createLeftPanel() {
